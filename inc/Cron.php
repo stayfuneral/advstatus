@@ -28,13 +28,15 @@ class Cron
                 switch ($ticketUserType) {
                     case Ticket::TICKET_USER_TYPE_AUTHOR:
                         $status = Ticket::TICKET_STATUS_IN_WORK;
+                        $ticket->setTicketStatus($status);
                         break;
                     case Ticket::TICKET_USER_TYPE_RESPONSIBLE:
                         $status = Ticket::TICKET_STATUS_PENDING;
+                        $ticket->setTicketStatus($status);
                         break;
                 }
 
-                $ticket->updateTicketStatus($ticketId, $status);
+                $ticket->updateTicketStatus($ticketId, $ticket->getTicketStatus());
             }
         }
     }
