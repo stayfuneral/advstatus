@@ -14,6 +14,7 @@ class Ticket extends \CommonDBTM
     private static $instance = null;
     private $db;
     private $ticketUser;
+    public $ticketStatus;
 
     /**
      * Ticket constructor.
@@ -24,6 +25,22 @@ class Ticket extends \CommonDBTM
     {
         $this->db = $db;
         $this->ticketUser = new \Ticket_User;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTicketStatus()
+    {
+        return $this->ticketStatus;
+    }
+
+    /**
+     * @param mixed $ticketStatus
+     */
+    public function setTicketStatus($ticketStatus): void
+    {
+        $this->ticketStatus = $ticketStatus;
     }
 
     /**
