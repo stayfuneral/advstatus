@@ -20,10 +20,23 @@ class Ticket extends CommonDBTM
 
     private static $instance = null;
 
+    /**
+     * @var DB
+     */
     private $db;
+    /**
+     * @var GlpiTicket
+     */
     private $ticket;
+    /**
+     * @var Ticket_User
+     */
     private $ticketUser;
+    /**
+     * @var ITILFollowup
+     */
     private $itilFollowup;
+
     public $ticketStatus;
 
     /**
@@ -39,6 +52,13 @@ class Ticket extends CommonDBTM
         $this->itilFollowup = new ITILFollowup;
     }
 
+    /**
+     * Поиск заявки по ID
+     *
+     * @param $id ID заявки
+     *
+     * @return array|bool
+     */
     public function findById($id)
     {
         $result = false;
@@ -50,17 +70,11 @@ class Ticket extends CommonDBTM
         return $result;
     }
 
-    /**
-     * @return mixed
-     */
     public function getTicketStatus()
     {
         return $this->ticketStatus;
     }
 
-    /**
-     * @param mixed $ticketStatus
-     */
     public function setTicketStatus($ticketStatus): void
     {
         $this->ticketStatus = $ticketStatus;
@@ -80,6 +94,11 @@ class Ticket extends CommonDBTM
         return self::$instance;
     }
 
+    /**
+     * Список комментариев по заявкам за последнюю минуту
+     *
+     * @return array
+     */
     public function getLastComments()
     {
         $result = [];
@@ -96,6 +115,14 @@ class Ticket extends CommonDBTM
         return $result;
     }
 
+    /**
+     * Тип пользователя, отправившего комментарий (инициатор заявки или специалист)
+     *
+     * @param $ticketsId
+     * @param $usersId
+     *
+     * @return int
+     */
     public function getTicketUserType($ticketsId, $usersId)
     {
         $ticketUser = $this->ticketUser->find([
@@ -110,7 +137,14 @@ class Ticket extends CommonDBTM
         }
     }
 
-
+    /**
+     * Смена статуса заявки
+     *
+     * @param $ticketId ID заявки
+     * @param $statusId ID статуса
+     *
+     * @return bool|\mysqli_result
+     */
     public function updateTicketStatus($ticketId, $statusId)
     {
         return $this->db->updateOrDie(
