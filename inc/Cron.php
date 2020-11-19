@@ -15,14 +15,13 @@ class Cron
     public static function init()
     {
         $ticket = Ticket::getInstance();
-
         $comments = $ticket->getLastComments();
+
         if(!empty($comments)) {
             foreach ($comments as $comment) {
 
                 $ticketId = $comment['items_id'];
                 $userId = $comment['users_id'];
-
 
                 $findTicket = $ticket->findById($ticketId);
 
@@ -39,10 +38,7 @@ class Cron
                             break;
                     }
 
-                    $ticket->updateTicketStatus($ticketId, $ticket->getTicketStatus());
-
                 }
-
 
             }
         }
