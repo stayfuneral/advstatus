@@ -23,20 +23,27 @@ class Cron
                 $ticketId = $comment['items_id'];
                 $userId = $comment['users_id'];
 
-                $ticketUserType = $ticket->getTicketUserType($ticketId, $userId);
 
-                switch ($ticketUserType) {
-                    case Ticket::TICKET_USER_TYPE_AUTHOR:
-                        $status = Ticket::TICKET_STATUS_IN_WORK;
-                        $ticket->setTicketStatus($status);
-                        break;
-                    case Ticket::TICKET_USER_TYPE_RESPONSIBLE:
-                        $status = Ticket::TICKET_STATUS_PENDING;
-                        $ticket->setTicketStatus($status);
-                        break;
+                $findTicket = $ticket->findById($ticketId);
+
+                if(intval($findTicket['status']) !== $ticket::TICKET_STATUS_CLOSED) {
+
+                    $ticketUserType = $ticket->getTicketUserType($ticketId, $userId);
+
+                    switch ($ticketUserType) {
+                        case $ticket::TICKET_USER_TYPE_AUTHOR:
+                            $ticket->setTicketStatus($ticket::TICKET_STATUS_IN_WORK);
+                            break;
+                        case $ticket::TICKET_USER_TYPE_RESPONSIBLE:
+                            $ticket->setTicketStatus($ticket::TICKET_STATUS_PENDING);
+                            break;
+                    }
+
+                    $ticket->updateTicketStatus($ticketId, $ticket->getTicketStatus());
+
                 }
 
-                $ticket->updateTicketStatus($ticketId, $ticket->getTicketStatus());
+
             }
         }
     }
