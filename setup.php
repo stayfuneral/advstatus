@@ -35,8 +35,8 @@ define('PLUGIN_ADVSTATUS_VERSION', '1.0.0');
  * @return void
  */
 function plugin_init_advstatus() {
-   global $PLUGIN_HOOKS;
-   $PLUGIN_HOOKS['csrf_compliant']['advstatus'] = true;
+    global $PLUGIN_HOOKS;
+    $PLUGIN_HOOKS['csrf_compliant']['advstatus'] = true;
 }
 
 
