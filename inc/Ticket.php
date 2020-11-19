@@ -3,8 +3,14 @@
 
 namespace Adv;
 
+use CommonDBTM;
+use DB;
+use ITILFollowup;
+use Ticket as GlpiTicket;
+use Ticket_User;
 
-class Ticket extends \CommonDBTM
+
+class Ticket extends CommonDBTM
 {
     const TICKET_STATUS_IN_WORK = 2;
     const TICKET_STATUS_PENDING = 4;
@@ -13,19 +19,24 @@ class Ticket extends \CommonDBTM
     const TICKET_USER_TYPE_RESPONSIBLE = 2;
 
     private static $instance = null;
+
     private $db;
+    private $ticket;
     private $ticketUser;
+    private $itilFollowup;
     public $ticketStatus;
 
     /**
      * Ticket constructor.
      *
-     * @param \DB $db
+     * @param DB $db
      */
-    private function __construct(\DB $db)
+    private function __construct(DB $db)
     {
         $this->db = $db;
-        $this->ticketUser = new \Ticket_User;
+        $this->ticket = new GlpiTicket;
+        $this->ticketUser = new Ticket_User;
+        $this->itilFollowup = new ITILFollowup;
     }
 
     public function findById($id)
@@ -72,9 +83,9 @@ class Ticket extends \CommonDBTM
     public function getLastComments()
     {
         $result = [];
-        $comments = $this->db->request(\ITILFollowup::getTable(), [
+        $comments = $this->itilFollowup->find([
             'date' => ['>=', Cron::getPreviousMinute('Y-m-d H:i:s')],
-            'itemtype' => \Ticket::class,
+            'itemtype' => GlpiTicket::class,
             'is_private' => 0
         ]);
 
@@ -103,7 +114,7 @@ class Ticket extends \CommonDBTM
     public function updateTicketStatus($ticketId, $statusId)
     {
         return $this->db->updateOrDie(
-            \Ticket::getTable(),
+            GlpiTicket::getTable(),
             ['status' => $statusId],
             ['id' => $ticketId]
         );
