@@ -8,6 +8,7 @@ class Ticket extends \CommonDBTM
 {
     const TICKET_STATUS_IN_WORK = 2;
     const TICKET_STATUS_PENDING = 4;
+    const TICKET_STATUS_CLOSED = 6;
     const TICKET_USER_TYPE_AUTHOR = 1;
     const TICKET_USER_TYPE_RESPONSIBLE = 2;
 
@@ -25,6 +26,17 @@ class Ticket extends \CommonDBTM
     {
         $this->db = $db;
         $this->ticketUser = new \Ticket_User;
+    }
+
+    public function findById($id)
+    {
+        $result = false;
+
+        foreach ($this->ticket->find(['id' => $id]) as $id => $ticket) {
+            $result = $ticket;
+        }
+
+        return $result;
     }
 
     /**
