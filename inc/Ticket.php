@@ -37,7 +37,7 @@ class Ticket extends CommonDBTM
      */
     private $itilFollowup;
 
-    public $ticketStatus;
+    public $status;
 
     /**
      * Ticket constructor.
@@ -50,6 +50,8 @@ class Ticket extends CommonDBTM
         $this->ticket = new GlpiTicket;
         $this->ticketUser = new Ticket_User;
         $this->itilFollowup = new ITILFollowup;
+
+        parent::__construct();
     }
 
     /**
@@ -70,14 +72,14 @@ class Ticket extends CommonDBTM
         return $result;
     }
 
-    public function getTicketStatus()
+    public function getStatus()
     {
-        return $this->ticketStatus;
+        return $this->status;
     }
 
-    public function setTicketStatus($ticketStatus): void
+    public function setStatus($status): void
     {
-        $this->ticketStatus = $ticketStatus;
+        $this->status = $status;
     }
 
     /**
@@ -150,7 +152,8 @@ class Ticket extends CommonDBTM
         return $this->db->updateOrDie(
             GlpiTicket::getTable(),
             ['status' => $statusId],
-            ['id' => $ticketId]
+            ['id' => $ticketId],
+            $this->db->error()
         );
     }
 
