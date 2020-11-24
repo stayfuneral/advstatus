@@ -23,9 +23,9 @@ class Cron
                 $ticketId = $comment['items_id'];
                 $userId = $comment['users_id'];
 
-                $findTicket = $ticket->findById($ticketId);
+                $currentStatus = $ticket->getTicketStatus($ticketId);
 
-                if(intval($findTicket['status']) !== $ticket::TICKET_STATUS_CLOSED) {
+                if($currentStatus !== $ticket::TICKET_STATUS_CLOSED) {
 
                     $ticketUserType = $ticket->getTicketUserType($ticketId, $userId);
 
