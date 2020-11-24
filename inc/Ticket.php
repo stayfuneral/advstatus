@@ -82,6 +82,12 @@ class Ticket extends CommonDBTM
         $this->status = $status;
     }
 
+    public function getTicketStatus($ticketId)
+    {
+        $ticket = $this->findById($ticketId);
+        return (int) $ticket['status'];
+    }
+
     /**
      * @return Ticket
      */
