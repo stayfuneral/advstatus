@@ -82,6 +82,13 @@ class Ticket extends CommonDBTM
         $this->status = $status;
     }
 
+    /**
+     * Текущий статус заявки
+     *
+     * @param $ticketId ID заявки
+     *
+     * @return int
+     */
     public function getTicketStatus($ticketId)
     {
         $ticket = $this->findById($ticketId);
